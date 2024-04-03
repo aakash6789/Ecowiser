@@ -40,7 +40,9 @@ const deleteImageOnCloudinary=async(localfilePath)=>{
   try {
     const publicId=extractPublicId(localfilePath);
     console.log(publicId);
-    cloudinary.uploader.destroy(`${publicId}`).then(result=>console.log("Result is",result));
+    // cloudinary.uploader.destroy(`${publicId}`).then(result=>console.log("Result is",result));
+    const result = await cloudinary.uploader.destroy(publicId);
+    console.log("Result is", result);
     
   } catch (error) {
     console.log("Error fetching image details from Cloudinary",error);
