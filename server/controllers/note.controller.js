@@ -49,8 +49,16 @@ const updateImage=asyncHandler(async(req,res)=>{
     await deleteImageOnCloudinary(note1.image);
     const note=await Note.findByIdAndUpdate(note1._id,{$set:{image:image.url}},{new:true});
     // note.save();
-    return res.status(200).json(new ApiResponse(200,{ id: note._id, image: note.image },"Image updated successfully"))
+    return res.status(200).json(new ApiResponse(200,{ id: note._id, image: note.image },"Image updated successfully"));
+
+})
+const updateContents=asyncHandler(async(req,res)=>{
+    const {updatedFields}=req.body;
+    console.log(req.body);
+    const note1 = await Note.findById(req.body.id);
+    const note=await Note.findByIdAndUpdate(req.body.id,req.body,{new:true});
+    return res.status(200).json(new ApiResponse(200,{ },"Note updated successfully"));
 
 })
 
-export {submitNote,updateImage};
+export {submitNote,updateImage,updateContents};
