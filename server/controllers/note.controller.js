@@ -5,7 +5,8 @@ import Note from "../models/note.model.js";
 import {uploadOnCloudinary,deleteImageOnCloudinary} from '../utils/Cloudinary.js'
 const submitNote=asyncHandler(async(req,res)=>{
     const {Tittle,Content,isPinned,image}=req.body;
-    console.log(req.file);
+    console.log("Files in req are",req.file);
+    console.log("Files in body are",req.body);
     const imgPath=req.file?.path;
     console.log(imgPath);
     
