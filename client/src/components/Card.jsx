@@ -27,7 +27,7 @@ const Card = (props) => {
       const handleUpdate=async()=>{
         formData.append("tittle",tittle);
         formData.append("content",content);
-        axios.put(`http://localhost:3000/api/v1/notes/updateContents`,{Tittle:tittle,Content:content,obj1})
+        axios.put(`http://localhost:3000/api/v1/notes/updateContents`,{Tittle:tittle,Content:content,obj1,isPinned})
     .then(response => {
       // console.log("New respose is",response);
       console.log(response)
@@ -42,7 +42,7 @@ const Card = (props) => {
       }
   return (
     <div className='w-1/4 relative border-gray-400 border-[2px] my-4 py-4'>
-        {!isEdit ?<div ref={titleRef}> <div className='absolute right-1 top-1'>  {obj1.isPinned ? <TiPin/>:<TiPinOutline/>} </div> 
+        {!isEdit ?<div ref={titleRef}> <div className='absolute right-1 top-1'>  {isPinned ? <TiPin/>:<TiPinOutline/>} </div> 
       <div className='flex flex-col mt-[5%] ml-[10%]'>
       {obj1.image && <img src={obj1.image} className='w-[70%]'></img>}
         <h1 className='text-[1vh] md:text-[3vh]'>{tittle}</h1>
@@ -52,7 +52,7 @@ const Card = (props) => {
   setIsEdit(!isEdit);
   console.log("isEdit toggled:", isEdit);
 }}><MdEdit /></button></div> :<div className='h-auto' >
-      <div className='absolute right-1 top-1'>  {obj1.isPinned ? <TiPin/>:<TiPinOutline/>} </div> 
+      <button onClick={()=>setIsPinned(!isPinned)} className='absolute right-1 top-1'>  {isPinned? <TiPin/>: <TiPinOutline  />} </button> 
       <div className='flex flex-col mt-[5%] ml-[10%]'>
       {obj1.image && <img src={obj1.image} className='w-[70%]'></img>}
         <input className='text-[1vh] md:text-[3vh]' value={tittle} onChange={(e)=>setTittle(e.target.value)}></input>
