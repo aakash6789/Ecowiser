@@ -1,11 +1,12 @@
 import React from 'react'
-import { useState,useEffect,useMemo } from 'react';
+import { useState,useEffect,useMemo,useRef } from 'react';
 import { FaImage } from "react-icons/fa";
 import { TiPinOutline,TiPin} from "react-icons/ti";
 import toast from "react-hot-toast";
 import {useForm,Controller} from 'react-hook-form';
 import axios from "axios";
 import { SERVER_URL } from '../constants/constant';
+import { BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
 import Card from './Card.jsx';
 const Home = () => {
     const formData=new FormData();
@@ -19,6 +20,17 @@ const Home = () => {
     const [loading,setLoading]=useState(true);
     const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const [showContent, setShowContent] = useState(false);
+
+  const handleTitleFocus = () => {
+    setShowContent(true);
+  };
+
+  const handleTitleBlur = () => {
+    setShowContent(false);
+  };
+  
     // const [tittle,setTittle]=useState("");
     // const [content,setContent]=useState("");
     // const[image,setImage]=useState(null);
@@ -65,13 +77,16 @@ const Home = () => {
         }
     }
     const getBooks=async()=>{
-      const pageSize = 6; // Number of books per page
+      const pageSize = 6; // Number of notes per page
     const offset = (currentPage - 1) * pageSize;
       axios.get(`http://localhost:3000/api/v1/notes/get-notes?offset=${offset}&limit=${pageSize}`) 
     .then(response => {
-      setNotes(response.data.data); 
+      // console.log("New respose is",response);
+      setNotes(response.data.data.notes); 
+      setTotalPages(Math.ceil(response.data.data.totalCount/pageSize));
       setLoading(false);
-      console.log(notes);  
+      // console.log(notes);  
+      // console.log(totalPages);  
       toast.success("Notes fetched successfully")
     })
     .catch(error => {
@@ -79,9 +94,7 @@ const Home = () => {
       toast.error("Error fetching notes")
     });
 }
-const handlePageChange = (page) => {
-  setCurrentPage(page);
-};
+
     useEffect(() => {
       
     getBooks();
@@ -89,20 +102,36 @@ const handlePageChange = (page) => {
   useEffect(() => {
     getBooks();
   }, [currentPage]);
+  const titleRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (titleRef.current && !titleRef.current.contains(event.target)) {
+        setShowContent(false);
+      }
+    };
+
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
 
     
   return (
     <div className='mt-[5%]  '>
-      <div className=' border-gray-400 border-[2px] mx-[30%] md:h-[42vh] max-sm:h-auto pt-2 px-2'>
-      <form action="" className='h-[100%]' onSubmit={handleSubmit(onSubmit,onError)} encType='multipart/formData'>
-        <input type='text' id='tittle' name='tittle' className='w-full focus:outline-none h-[10%]' placeholder='Tittle' {...register("tittle",{
+      <div className=' border-gray-400 border-[2px] mx-[30%] md:h-[auto] max-sm:h-auto pt-2 pb-2 px-2'>
+      <form ref={titleRef} action="" className='h-[100%]' onSubmit={handleSubmit(onSubmit,onError)} encType='multipart/formData'>
+        <input type='text' id='tittle' name='tittle' className='w-full focus:outline-none h-[15%]' placeholder='Tittle' onFocus={handleTitleFocus}
+        onBlur={handleTitleBlur} {...register("tittle",{
               required:true,
               minLength:0,
             })}></input>
-        <textarea type='text' className='w-full focus:outline-none h-[70%] mt-[3%]' placeholder='Write a note...' {...register("content",{
+      { showContent && <div className='w-full focus:outline-none h-[70%] mt-[3%]'> <textarea type='text' className='w-full focus:outline-none h-[20vh]  mt-[1%]' placeholder='Write a note...' {...register("content",{
               required:true,
               minLength:0,
-            })}></textarea>
+            })}></textarea> 
         <div className='flex px-4 relative h-[4vh] justify-between'>
             <div className='mt-1'>
                 <button onClick={()=>setIsPinned(!isPinned)}>
@@ -121,19 +150,25 @@ const handlePageChange = (page) => {
         <FaImage />
         </div>
         <button className='text-white  bg-black rounded-lg sm:px-2 max-sm:px-2 p-1 max-sm:py-0  text-[2vh] max-sm:text-[1vh]' type="submit">Save</button>
+      
         </div>
+        </div>}
+
         </form>
       </div>
-      <div className='grid grid-cols-2 mt-[10%] '>
+                
+      <div className='grid grid-cols-2 mt-[10%] justify-items-center items-center '>
       {Array.isArray(notes) ? (
     notes.map((note, ind) => <Card obj={note} key={ind + note._id} />)
 ) : (
     <h1>Loading ...</h1>
 )}
 </div>
-{Array.from({ length: totalPages }, (_, index) => index + 1).map(page => (
-          <button key={page} className='' onClick={() => handlePageChange(page)}>{page}</button>
-        ))}
+<div className='flex justify-center'>
+  <BsChevronCompactLeft className='mt-2 cursor-pointer' onClick={()=> currentPage===1?setCurrentPage(totalPages):setCurrentPage(currentPage-1)}/>
+          <button  className=' bg-black text-white px-2 rounded-md py-1 mx-2' onClick={() => setCurrentPage(currentPage+1)}>{currentPage}</button>
+        <BsChevronCompactRight className='mt-2 cursor-pointer' onClick={()=> currentPage===totalPages?setCurrentPage(1):setCurrentPage(currentPage+1)}/>
+        </div>
     </div>
   )
 }

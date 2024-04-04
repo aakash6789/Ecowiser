@@ -69,7 +69,7 @@ const getNotes=asyncHandler(async(req,res)=>{
     if(!notes){
         throw new ApiError(404,"Error:Notes are empty");
     }
-    return res.status(200).json(new ApiResponse(200,notes,"Notes fetched successfully"));
+    return res.status(200).json(new ApiResponse(200,{notes,totalCount},"Notes fetched successfully"));
 })
 
 export {submitNote,updateImage,updateContents,getNotes};
