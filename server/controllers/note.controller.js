@@ -55,10 +55,13 @@ const updateImage=asyncHandler(async(req,res)=>{
 })
 const updateContents=asyncHandler(async(req,res)=>{
     const {updatedFields}=req.body;
-    console.log(req.body);
-    const note1 = await Note.findById(req.body.id);
-    const note=await Note.findByIdAndUpdate(req.body.id,req.body,{new:true});
-    return res.status(200).json(new ApiResponse(200,{ },"Note updated successfully"));
+    console.log("Req body is",req.body);
+    // console.log(req.body.content);
+    const note1 = await Note.findById(req.body.obj1._id);
+    const note=await Note.findByIdAndUpdate(req.body.obj1._id,{Tittle:req.body.Tittle,Content:req.body.Content},{new:true});
+    // console.log("Note is",note);
+    // console.log("Note1 is",note1);
+    return res.status(200).json(new ApiResponse(200,{note },"Note updated successfully"));
 
 });
 

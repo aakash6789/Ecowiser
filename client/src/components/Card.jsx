@@ -1,6 +1,8 @@
 import React, { useState,useEffect,useRef } from 'react'
 import { TiPinOutline,TiPin} from "react-icons/ti";
 import { MdEdit } from "react-icons/md";
+import axios from 'axios';
+import toast from 'react-hot-toast';
 const Card = (props) => {
     const titleRef = useRef(null);
     const obj1=props.obj;
@@ -23,7 +25,20 @@ const Card = (props) => {
         };
       }, []);
       const handleUpdate=async()=>{
-        
+        formData.append("tittle",tittle);
+        formData.append("content",content);
+        axios.put(`http://localhost:3000/api/v1/notes/updateContents`,{Tittle:tittle,Content:content,obj1})
+    .then(response => {
+      // console.log("New respose is",response);
+      console.log(response)
+      setTittle(response.data.data.notes); 
+     
+      toast.success("Notes updated successfully")
+    })
+    .catch(error => {
+      console.error('Error fetching books:', error);
+      toast.error("Error fetching notes")
+    });
       }
   return (
     <div className='w-1/4 relative border-gray-400 border-[2px] my-4 py-4'>
@@ -46,6 +61,7 @@ const Card = (props) => {
       <button className='absolute right-1 bottom-1 bg-black text-white px-2 rounded-md py-1 mx-2' onClick={() => {
   setIsEdit(!isEdit);
   console.log("isEdit toggled:", isEdit);
+  handleUpdate();
 }} >Save</button>
         </div>}
     
