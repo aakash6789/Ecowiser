@@ -17,6 +17,8 @@ const Home = () => {
     const [isPinned,setIsPinned]=useState(false);
     const [notes,setNotes]=useState([]);
     const [loading,setLoading]=useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
     // const [tittle,setTittle]=useState("");
     // const [content,setContent]=useState("");
     // const[image,setImage]=useState(null);
@@ -52,6 +54,7 @@ const Home = () => {
             const response=await fetch(`http://localhost:3000/api/v1/notes/submit`,{method:"POST",
             body:formData});
             console.log(response);
+            getBooks();
             toast.success("New Note added sucessfully!!");
            setIsPinned(false);
            reset();
@@ -61,19 +64,31 @@ const Home = () => {
             toast.error("Note didn't add, Try Again!!")
         }
     }
+    const getBooks=async()=>{
+      const pageSize = 6; // Number of books per page
+    const offset = (currentPage - 1) * pageSize;
+      axios.get(`http://localhost:3000/api/v1/notes/get-notes?offset=${offset}&limit=${pageSize}`) 
+    .then(response => {
+      setNotes(response.data.data); 
+      setLoading(false);
+      console.log(notes);  
+      toast.success("Notes fetched successfully")
+    })
+    .catch(error => {
+      console.error('Error fetching books:', error);
+      toast.error("Error fetching notes")
+    });
+}
+const handlePageChange = (page) => {
+  setCurrentPage(page);
+};
     useEffect(() => {
-      axios.get('http://localhost:3000/api/v1/notes/get-notes')
-        .then(response => {
-          setNotes(response.data.data); 
-          setLoading(false);
-          console.log(notes);  
-          toast.success("Notes fetched successfully")
-        })
-        .catch(error => {
-          console.error('Error fetching books:', error);
-          toast.error("Error fetching notes")
-        });
-    }, []);
+      
+    getBooks();
+  }, []);
+  useEffect(() => {
+    getBooks();
+  }, [currentPage]);
 
     
   return (
@@ -116,6 +131,9 @@ const Home = () => {
     <h1>Loading ...</h1>
 )}
 </div>
+{Array.from({ length: totalPages }, (_, index) => index + 1).map(page => (
+          <button key={page} className='' onClick={() => handlePageChange(page)}>{page}</button>
+        ))}
     </div>
   )
 }

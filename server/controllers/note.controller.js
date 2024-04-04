@@ -63,7 +63,9 @@ const updateContents=asyncHandler(async(req,res)=>{
 });
 
 const getNotes=asyncHandler(async(req,res)=>{
-    const notes=await Note.find().sort({ isPinned: -1 });
+    const { offset = 0, limit = 6 } = req.query;
+    const totalCount = await Note.countDocuments();
+    const notes=await Note.find().sort({ isPinned: -1 ,image: -1}).skip(parseInt(offset)).limit(parseInt(limit));
     if(!notes){
         throw new ApiError(404,"Error:Notes are empty");
     }
