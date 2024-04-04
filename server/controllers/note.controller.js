@@ -5,8 +5,8 @@ import Note from "../models/note.model.js";
 import {uploadOnCloudinary,deleteImageOnCloudinary} from '../utils/Cloudinary.js'
 const submitNote=asyncHandler(async(req,res)=>{
     const {Tittle,Content,isPinned,image}=req.body;
-    console.log("Files in req are",req.file);
-    console.log("Files in body are",req.body);
+    // console.log("Files in req are",req.file);
+    // console.log("Files in body are",req.body);
     const imgPath=req.file?.path;
     console.log(imgPath);
     
@@ -60,6 +60,14 @@ const updateContents=asyncHandler(async(req,res)=>{
     const note=await Note.findByIdAndUpdate(req.body.id,req.body,{new:true});
     return res.status(200).json(new ApiResponse(200,{ },"Note updated successfully"));
 
+});
+
+const getNotes=asyncHandler(async(req,res)=>{
+    const notes=await Note.find().sort({ isPinned: -1 });
+    if(!notes){
+        throw new ApiError(404,"Error:Notes are empty");
+    }
+    return res.status(200).json(new ApiResponse(200,notes,"Notes fetched successfully"));
 })
 
-export {submitNote,updateImage,updateContents};
+export {submitNote,updateImage,updateContents,getNotes};

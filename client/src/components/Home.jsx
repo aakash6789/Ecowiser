@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import {useForm,Controller} from 'react-hook-form';
 import axios from "axios";
 import { SERVER_URL } from '../constants/constant';
+import Card from './Card.jsx';
 const Home = () => {
     const formData=new FormData();
     const {
@@ -14,6 +15,8 @@ const Home = () => {
       formState: { errors },reset
     } = useForm();
     const [isPinned,setIsPinned]=useState(false);
+    const [notes,setNotes]=useState([]);
+    const [loading,setLoading]=useState(true);
     // const [tittle,setTittle]=useState("");
     // const [content,setContent]=useState("");
     // const[image,setImage]=useState(null);
@@ -58,12 +61,25 @@ const Home = () => {
             toast.error("Note didn't add, Try Again!!")
         }
     }
+    useEffect(() => {
+      axios.get('http://localhost:3000/api/v1/notes/get-notes')
+        .then(response => {
+          setNotes(response.data.data); 
+          setLoading(false);
+          console.log(notes);  
+          toast.success("Notes fetched successfully")
+        })
+        .catch(error => {
+          console.error('Error fetching books:', error);
+          toast.error("Error fetching notes")
+        });
+    }, []);
 
     
   return (
     <div className='mt-[5%]  '>
       <div className=' border-gray-400 border-[2px] mx-[30%] md:h-[42vh] max-sm:h-auto pt-2 px-2'>
-      <form action="" className='h-[90%]' onSubmit={handleSubmit(onSubmit,onError)} encType='multipart/formData'>
+      <form action="" className='h-[100%]' onSubmit={handleSubmit(onSubmit,onError)} encType='multipart/formData'>
         <input type='text' id='tittle' name='tittle' className='w-full focus:outline-none h-[10%]' placeholder='Tittle' {...register("tittle",{
               required:true,
               minLength:0,
@@ -79,21 +95,27 @@ const Home = () => {
         </button>
         </div>
         <div className='mt-1'>
-        <Controller
+        <Controller className='cursor-pointer'
                 name="file"
                 control={control}
                 render={({ field }) => (
-                  <input {...field} type="file" id="image" className='absolute w-[10%] opacity-0' />
+                  <input {...field} type="file" id="image" className='absolute w-[10%] opacity-0 ' />
                 )}
               />
             {/* <input type="file" className='absolute w-[10%] opacity-0' onChange={handleImageChange} /> */}
         <FaImage />
         </div>
-        {/* <button className=''>Save</button> */}
         <button className='text-white  bg-black rounded-lg sm:px-2 max-sm:px-2 p-1 max-sm:py-0  text-[2vh] max-sm:text-[1vh]' type="submit">Save</button>
         </div>
         </form>
       </div>
+      <div className='grid grid-cols-2 mt-[10%] '>
+      {Array.isArray(notes) ? (
+    notes.map((note, ind) => <Card obj={note} key={ind + note._id} />)
+) : (
+    <h1>Loading ...</h1>
+)}
+</div>
     </div>
   )
 }
