@@ -45,8 +45,8 @@ const Card = (props) => {
         {!isEdit ?<div ref={titleRef}> <div className='absolute right-1 top-1'>  {obj1.isPinned ? <TiPin/>:<TiPinOutline/>} </div> 
       <div className='flex flex-col mt-[5%] ml-[10%]'>
       {obj1.image && <img src={obj1.image} className='w-[70%]'></img>}
-        <h1 className='text-[1vh] md:text-[3vh]'>{obj1.Tittle}</h1>
-        <h2 className='mt-[2%] text-[1vh] md:text-[2vh]'>{obj1.Content}</h2>
+        <h1 className='text-[1vh] md:text-[3vh]'>{tittle}</h1>
+        <h2 className='mt-[2%] text-[1vh] md:text-[2vh]'>{content}</h2>
       </div>
       <button className='absolute right-1 bottom-1' onClick={() => {
   setIsEdit(!isEdit);
