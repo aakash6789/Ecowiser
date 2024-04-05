@@ -44,11 +44,11 @@ const Card = (props) => {
     });
       }
   return (
-    <div ref={titleRef} id={obj1._id}  className='w-1/2 relative border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg'>
+    <div ref={titleRef} id={obj1._id}  className='w-1/2 relative  border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg'>
         {!isEdit ?<div> <div className='absolute right-1 top-1'>  {isPinned ? <TiPin/>:<TiPinOutline/>} </div> 
       <div className='flex flex-col mt-[5%] ml-[10%]'>
       {obj1.image && <img src={obj1.image} className='w-[50%] rounded-lg'></img>}
-        <h1 className='text-[1vh] md:text-[3vh] mt-[5%]'>{tittle}</h1>
+        <h1 className='text-[1vh] md:text-[3vh] mt-[5%] font-bold'>{tittle}</h1>
         <h2 className='mt-[2%] text-[1vh] md:text-[2vh]'>{content}</h2>
       </div>
       <button className='absolute right-1 bottom-1' onClick={() => {

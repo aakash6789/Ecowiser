@@ -15,7 +15,7 @@ const Home = () => {
       handleSubmit,control,
       formState: { errors },reset
     } = useForm();
-    const [isPinned,setIsPinned]=useState(false);
+
     const [notes,setNotes]=useState([]);
     const [loading,setLoading]=useState(true);
     const [currentPage, setCurrentPage] = useState(1);
@@ -44,15 +44,15 @@ const Home = () => {
     const onSubmit=async(data,e)=>{
         e.preventDefault(); 
         data.file = e.target.file.files;
-        console.log(data);
+        // console.log(data);
          formData.append('image',data.file[0]);
          formData.append('Tittle',data.tittle);
          formData.append('Content',data.content);
          formData.append('isPinned',data.isChecked);
-         console.log(formData);
-         for (var key of formData.entries()) {
-            console.log(key[0] + ', ' + key[1]);
-        }
+        //  console.log(formData);
+        //  for (var key of formData.entries()) {
+        //     console.log(key[0] + ', ' + key[1]);
+        // }
          saveNote(formData);
          
 
