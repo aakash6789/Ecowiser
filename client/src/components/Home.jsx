@@ -11,7 +11,7 @@ import Card from './Card.jsx';
 const Home = () => {
     const formData=new FormData();
     const {
-      register,
+      register,watch,
       handleSubmit,control,
       formState: { errors },reset
     } = useForm();
@@ -22,6 +22,7 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
 
   const [showContent, setShowContent] = useState(false);
+  const isChecked = watch('isChecked');
 
   const handleTitleFocus = () => {
     setShowContent(true);
@@ -47,7 +48,7 @@ const Home = () => {
          formData.append('image',data.file[0]);
          formData.append('Tittle',data.tittle);
          formData.append('Content',data.content);
-         formData.append('isPinned',isPinned);
+         formData.append('isPinned',data.isChecked);
          console.log(formData);
          for (var key of formData.entries()) {
             console.log(key[0] + ', ' + key[1]);
@@ -121,8 +122,8 @@ const Home = () => {
     
   return (
     <div className='mt-[5%]  '>
-      <div className=' border-gray-400 border-[2px] mx-[30%] md:h-[auto] max-sm:h-auto pt-2 pb-2 px-2'>
-      <form ref={titleRef} action="" className='h-[100%]' onSubmit={handleSubmit(onSubmit,onError)} encType='multipart/formData'>
+      <div  className=' border-gray-400 border-[2px] mx-[30%] md:h-[auto] max-sm:h-auto pt-2 pb-2 px-2'>
+      <form ref={titleRef} action="" className='h-[100%] relative' onSubmit={handleSubmit(onSubmit,onError)} encType='multipart/formData'>
         <input type='text' id='tittle' name='tittle' className='w-full focus:outline-none h-[15%]' placeholder='Tittle' onFocus={handleTitleFocus}
         onBlur={handleTitleBlur} {...register("tittle",{
               required:true,
@@ -134,11 +135,31 @@ const Home = () => {
             })}></textarea> 
         <div className='flex px-4 relative h-[4vh] justify-between'>
             <div className='mt-1'>
-                <button onClick={()=>setIsPinned(!isPinned)}>
-       {isPinned? <TiPin/>: <TiPinOutline  />}
-        </button>
+                {/* <button type="button" onClick={(e)=>{
+                  e.preventDefault();
+                  setIsPinned(!isPinned)}}> */}
+       {/* {isPinned? <TiPin/>: <TiPinOutline  />} */}
+        {/* </button> */}
+        
+<label className=''>
+          <Controller 
+            name="isChecked"
+            control={control}
+            defaultValue={false} // Set default value if needed
+            render={({ field }) => (
+              <input className='opacity-0'
+                type="checkbox"
+                {...field}
+              />
+            )}
+          />
+          <div className='absolute bottom-[1px]'>
+        {isChecked ? <TiPin /> : <TiPinOutline />
+        }
         </div>
-        <div className='mt-1'>
+        </label>
+        </div>
+        <div className='mt-2'>
         <Controller className='cursor-pointer'
                 name="file"
                 control={control}
@@ -148,6 +169,9 @@ const Home = () => {
               />
             {/* <input type="file" className='absolute w-[10%] opacity-0' onChange={handleImageChange} /> */}
         <FaImage />
+        
+        <div>
+        </div>
         </div>
         <button className='text-white  bg-black rounded-lg sm:px-2 max-sm:px-2 p-1 max-sm:py-0  text-[2vh] max-sm:text-[1vh]' type="submit">Save</button>
       
@@ -157,12 +181,13 @@ const Home = () => {
         </form>
       </div>
                 
-      <div className='grid grid-cols-2 mt-[10%] justify-items-center items-center '>
+      <div className='grid grid-cols-3 mt-[10%] justify-items-center  '>
       {Array.isArray(notes) ? (
     notes.map((note, ind) => <Card obj={note} key={ind + note._id} />)
 ) : (
-    <h1>Loading ...</h1>
-)}
+    <h1>Loading ...</h1> 
+)} 
+{/* <Card obj={notes[2]}  /> */}
 </div>
 <div className='flex justify-center'>
   <BsChevronCompactLeft className='mt-2 cursor-pointer' onClick={()=> currentPage===1?setCurrentPage(totalPages):setCurrentPage(currentPage-1)}/>
