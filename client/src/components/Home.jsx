@@ -69,7 +69,7 @@ const Home = () => {
             console.log(response);
             getBooks();
             toast.success("New Note added sucessfully!!");
-           setIsPinned(false);
+          //  setIsPinned(false);
            reset();
             
         } catch (error) {
@@ -189,7 +189,7 @@ const Home = () => {
 )} 
 {/* <Card obj={notes[2]}  /> */}
 </div>
-<div className='flex justify-center'>
+<div className='flex justify-center mb-8 mt-6'>
   <BsChevronCompactLeft className='mt-2 cursor-pointer' onClick={()=> currentPage===1?setCurrentPage(totalPages):setCurrentPage(currentPage-1)}/>
           <button  className=' bg-black text-white px-2 rounded-md py-1 mx-2' onClick={() => setCurrentPage(currentPage+1)}>{currentPage}</button>
         <BsChevronCompactRight className='mt-2 cursor-pointer' onClick={()=> currentPage===totalPages?setCurrentPage(1):setCurrentPage(currentPage+1)}/>

@@ -8,7 +8,7 @@ function App() {
   return (
     <>
     <Navbar/>
-    <hr className=' border-black border-[1px]'></hr> 
+    {/* <hr className=' border-black border-[1px]'></hr>  */}
       <Home/>
     </>
   )

@@ -3,6 +3,7 @@ import { TiPinOutline,TiPin} from "react-icons/ti";
 import { MdEdit } from "react-icons/md";
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import Popup from './Popup.jsx';
 const Card = (props) => {
     const titleRef = useRef(null);
     const obj1=props.obj;
@@ -44,12 +45,32 @@ const Card = (props) => {
     });
       }
   return (
-    <div ref={titleRef} id={obj1._id}  className='w-1/2 relative  border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg'>
+    <div ref={titleRef} id={obj1._id}  className='w-1/2 relative    border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg'>
+      <Popup trigger={isEdit} setTrigger={setIsEdit}>
+        {/* <h1>Pop activated</h1> */}
+        <div className='h-auto bg-white relative rounded-lg pt-4' >
+      <button onClick={()=>setIsPinned(!isPinned)} className='absolute right-1 top-1'>  {isPinned? <TiPin/>: <TiPinOutline  />} </button> 
+      <div className='flex flex-col mt-[5%] ml-[10%]'>
+      {obj1.image && <img src={obj1.image} className='w-[50%] rounded-lg'></img>}
+        <input className='text-[1vh] md:text-[3vh] font-semibold mt-4' value={tittle} onChange={(e)=>setTittle(e.target.value)}></input>
+        <textarea className='mt-[2%] mb-12 text-[1vh] md:text-[2vh] resize-none'  rows="4" cols="50" value={content} onChange={(e)=>setContent(e.target.value)}></textarea>
+      </div>
+      <button className='absolute left-1 bottom-1 bg-black text-white px-2 rounded-md py-1 mx-2' onClick={() => {
+  setIsEdit(!isEdit);
+  console.log("isEdit toggled:", isEdit);
+}} >Close</button>
+      <button className='absolute right-1 bottom-1 bg-black text-white px-2 rounded-md py-1 mx-2' onClick={() => {
+  setIsEdit(!isEdit);
+  console.log("isEdit toggled:", isEdit);
+  handleUpdate();
+}} >Save</button>
+        </div>
+      </Popup>
         {!isEdit ?<div> <div className='absolute right-1 top-1'>  {isPinned ? <TiPin/>:<TiPinOutline/>} </div> 
       <div className='flex flex-col mt-[5%] ml-[10%]'>
       {obj1.image && <img src={obj1.image} className='w-[50%] rounded-lg'></img>}
-        <h1 className='text-[1vh] md:text-[3vh] mt-[5%] font-bold'>{tittle}</h1>
-        <h2 className='mt-[2%] text-[1vh] md:text-[2vh]'>{content}</h2>
+        <h1 className='text-[1vh] lg:text-[3vh] md:text-[1.6vh] mt-[5%] font-bold'>{tittle}</h1>
+        <h2 className='mt-[2%] text-[1vh] md:text-[1.2vh]'>{content}</h2>
       </div>
       <button className='absolute right-1 bottom-1' onClick={() => {
   setIsEdit(!isEdit);
