@@ -183,7 +183,7 @@ const Home = () => {
                 
       <div className='grid grid-cols-3 mt-[10%] justify-items-center  '>
       {Array.isArray(notes) ? (
-    notes.map((note, ind) => <Card obj={note} key={ind + note._id} />)
+    notes.map((note, ind) => <Card obj={note} key={ind + note._id} setNotes={setNotes} notes={notes} />)
 ) : (
     <h1>Loading ...</h1> 
 )} 

@@ -4,6 +4,7 @@ import { MdEdit } from "react-icons/md";
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import Popup from './Popup.jsx';
+import { MdDelete } from "react-icons/md";
 const Card = (props) => {
     const titleRef = useRef(null);
     const obj1=props.obj;
@@ -44,6 +45,19 @@ const Card = (props) => {
       toast.error("Error fetching notes")
     });
       }
+      const deleteNote=async(id)=>{
+        try {
+          await axios.post(`http://localhost:3000/api/v1/notes/delete-note`,{id:id}).then((res)=>{console.log(res.data.data.removedNote);
+          props.setNotes(props.notes.filter(note => note._id !== res.data.data.removedNote._id));
+  
+        }
+        );
+          
+        } catch (err) {
+          console.error(err);
+          // Handle error
+        }
+      }
   return (
     <div ref={titleRef} id={obj1._id}  className='w-1/2 relative    border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg'>
       <Popup trigger={isEdit} setTrigger={setIsEdit}>
@@ -55,6 +69,9 @@ const Card = (props) => {
         <input className='text-[1vh] md:text-[3vh] font-semibold mt-4' value={tittle} onChange={(e)=>setTittle(e.target.value)}></input>
         <textarea className='mt-[2%] mb-12 text-[1vh] md:text-[2vh] resize-none'  rows="4" cols="50" value={content} onChange={(e)=>setContent(e.target.value)}></textarea>
       </div>
+      <MdDelete className='absolute bottom-3 left-[49%] cursor-pointer ' onClick={()=>{
+        setIsEdit(!isEdit);
+        deleteNote(obj1._id)}}></MdDelete>
       <button className='absolute left-1 bottom-1 bg-black text-white px-2 rounded-md py-1 mx-2' onClick={() => {
   setIsEdit(!isEdit);
   console.log("isEdit toggled:", isEdit);

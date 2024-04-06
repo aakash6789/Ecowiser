@@ -75,4 +75,15 @@ const getNotes=asyncHandler(async(req,res)=>{
     return res.status(200).json(new ApiResponse(200,{notes,totalCount},"Notes fetched successfully"));
 })
 
-export {submitNote,updateImage,updateContents,getNotes};
+const deleteNote=asyncHandler(async(req,res)=>{
+  const {id}=req.body;
+  console.log(req.body);
+  console.log("Id is ",id);
+  const removedNote=await Note.findByIdAndDelete(id);
+  if(!removedNote){
+    throw new ApiError("Note doesn't exist for deletion");
+  }
+  return res.status(200).json(new ApiResponse(200,{removedNote},"Note deleted successfully!!"));
+})
+
+export {submitNote,updateImage,updateContents,getNotes,deleteNote};
