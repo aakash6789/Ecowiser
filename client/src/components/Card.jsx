@@ -15,7 +15,7 @@ const Card = (props) => {
     const formData=new FormData();
     useEffect(() => {
         const handleClickOutside = (event) => {
-          if (titleRef.current && !titleRef.current.contains(event.target) && titleRef.current.id!=obj1._id) {
+          if (titleRef.current && !titleRef.current.contains(event.target) ) {
             console.log(titleRef.current.id);
             // console.log(event.target);
             setIsEdit(false);
@@ -32,7 +32,7 @@ const Card = (props) => {
       const handleUpdate=async()=>{
         formData.append("tittle",tittle);
         formData.append("content",content);
-        axios.put(`http://localhost:3000/api/v1/notes/updateContents`,{Tittle:tittle,Content:content,obj1,isPinned})
+        axios.put(`${import.meta.env.VITE_API_SERVER_BASE_URL}/updateContents`,{Tittle:tittle,Content:content,obj1,isPinned})
     .then(response => {
       // console.log("New respose is",response);
       // console.log(response)
@@ -47,7 +47,7 @@ const Card = (props) => {
       }
       const deleteNote=async(id)=>{
         try {
-          await axios.post(`http://localhost:3000/api/v1/notes/delete-note`,{id:id}).then((res)=>{console.log(res.data.data.removedNote);
+          await axios.post(`${import.meta.env.VITE_API_SERVER_BASE_URL}/delete-note`,{id:id}).then((res)=>{
           props.setNotes(props.notes.filter(note => note._id !== res.data.data.removedNote._id));
   
         }
@@ -59,12 +59,12 @@ const Card = (props) => {
         }
       }
   return (
-    <div ref={titleRef} id={obj1._id}  className='w-1/2 relative    border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg'>
-      <Popup trigger={isEdit} setTrigger={setIsEdit}>
+    <div  id={obj1._id}  className='w-1/2 relative    border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg '>
+      <Popup trigger={isEdit} setTrigger={setIsEdit} >
         {/* <h1>Pop activated</h1> */}
         <div className='h-auto bg-white relative rounded-lg pt-4' >
       <button onClick={()=>setIsPinned(!isPinned)} className='absolute right-1 top-1'>  {isPinned? <TiPin/>: <TiPinOutline  />} </button> 
-      <div className='flex flex-col mt-[5%] ml-[10%]'>
+      <div className='flex flex-col mt-[5%] ml-[10%] mr-[5%] mb-[10%]'>
       {obj1.image && <img src={obj1.image} className='w-[50%] rounded-lg'></img>}
         <input className='text-[1vh] md:text-[3vh] font-semibold mt-4' value={tittle} onChange={(e)=>setTittle(e.target.value)}></input>
         <textarea className='mt-[2%] mb-12 text-[1vh] md:text-[2vh] resize-none'  rows="4" cols="50" value={content} onChange={(e)=>setContent(e.target.value)}></textarea>
@@ -84,14 +84,14 @@ const Card = (props) => {
         </div>
       </Popup>
         {!isEdit ?<div> <div className='absolute right-1 top-1'>  {isPinned ? <TiPin/>:<TiPinOutline/>} </div> 
-      <div className='flex flex-col mt-[5%] ml-[10%]'>
+      <div className='flex flex-col mt-[5%] ml-[10%] mr-[5%] mb-[5%]'>
       {obj1.image && <img src={obj1.image} className='w-[50%] rounded-lg'></img>}
         <h1 className='text-[1vh] lg:text-[3vh] md:text-[1.6vh] mt-[5%] font-bold'>{tittle}</h1>
-        <h2 className='mt-[2%] text-[1vh] md:text-[1.2vh]'>{content}</h2>
+        <h2 className='mt-[2%] text-[1vh] lg:text-[1.5vh] md:text-[1.2vh]'>{content}</h2>
       </div>
       <button className='absolute right-1 bottom-1' onClick={() => {
   setIsEdit(!isEdit);
-  console.log("isEdit", isEdit);
+  // console.log("isEdit", isEdit);
 }}><MdEdit /></button></div> :<div className='h-auto' >
       <button onClick={()=>setIsPinned(!isPinned)} className='absolute right-1 top-1'>  {isPinned? <TiPin/>: <TiPinOutline  />} </button> 
       <div className='flex flex-col mt-[5%] ml-[10%]'>

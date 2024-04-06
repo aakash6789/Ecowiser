@@ -64,7 +64,7 @@ const Home = () => {
     const saveNote=async(formData)=>{
         try {
             
-            const response=await fetch(`http://localhost:3000/api/v1/notes/submit`,{method:"POST",
+            const response=await fetch(`${import.meta.env.VITE_API_SERVER_BASE_URL}/submit`,{method:"POST",
             body:formData});
             console.log(response);
             getBooks();
@@ -80,7 +80,7 @@ const Home = () => {
     const getBooks=async()=>{
       const pageSize = 6; // Number of notes per page
     const offset = (currentPage - 1) * pageSize;
-      axios.get(`http://localhost:3000/api/v1/notes/get-notes?offset=${offset}&limit=${pageSize}`) 
+      axios.get(`${import.meta.env.VITE_API_SERVER_BASE_URL}/get-notes?offset=${offset}&limit=${pageSize}`) 
     .then(response => {
       // console.log("New respose is",response);
       setNotes(response.data.data.notes); 
@@ -141,7 +141,7 @@ const Home = () => {
        {/* {isPinned? <TiPin/>: <TiPinOutline  />} */}
         {/* </button> */}
         
-<label className=''>
+<label className='cursor-pointer'>
           <Controller 
             name="isChecked"
             control={control}
@@ -159,7 +159,7 @@ const Home = () => {
         </div>
         </label>
         </div>
-        <div className='mt-2'>
+        <div className='mt-2 cursor-pointer'>
         <Controller className='cursor-pointer'
                 name="file"
                 control={control}
@@ -168,7 +168,7 @@ const Home = () => {
                 )}
               />
             {/* <input type="file" className='absolute w-[10%] opacity-0' onChange={handleImageChange} /> */}
-        <FaImage />
+        <FaImage className='cursor-pointer' />
         
         <div>
         </div>
@@ -183,7 +183,7 @@ const Home = () => {
                 
       <div className='grid grid-cols-3 mt-[10%] justify-items-center  '>
       {Array.isArray(notes) ? (
-    notes.map((note, ind) => <Card obj={note} key={ind + note._id} setNotes={setNotes} notes={notes} />)
+    notes.map((note, ind) => <Card obj={note} key={ind + note._id} setNotes={setNotes} notes={notes} className=' ' />)
 ) : (
     <h1>Loading ...</h1> 
 )} 
