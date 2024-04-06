@@ -64,7 +64,7 @@ const Home = () => {
     const saveNote=async(formData)=>{
         try {
             
-            const response=await fetch(`${import.meta.env.VITE_API_SERVER_BASE_URL}/submit`,{method:"POST",
+            const response=await fetch(`${import.meta.env.VITE_API_SERVER_BASE_URL}/api/v1/notes/submit`,{method:"POST",
             body:formData});
             console.log(response);
             getBooks();
@@ -80,7 +80,7 @@ const Home = () => {
     const getBooks=async()=>{
       const pageSize = 6; // Number of notes per page
     const offset = (currentPage - 1) * pageSize;
-      axios.get(`${import.meta.env.VITE_API_SERVER_BASE_URL}/get-notes?offset=${offset}&limit=${pageSize}`) 
+      axios.get(`${import.meta.env.VITE_API_SERVER_BASE_URL}/api/v1/notes/get-notes?offset=${offset}&limit=${pageSize}`) 
     .then(response => {
       // console.log("New respose is",response);
       setNotes(response.data.data.notes); 

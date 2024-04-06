@@ -32,7 +32,7 @@ const Card = (props) => {
       const handleUpdate=async()=>{
         formData.append("tittle",tittle);
         formData.append("content",content);
-        axios.put(`${import.meta.env.VITE_API_SERVER_BASE_URL}/updateContents`,{Tittle:tittle,Content:content,obj1,isPinned})
+        axios.put(`${import.meta.env.VITE_API_SERVER_BASE_URL}/api/v1/notes/updateContents`,{Tittle:tittle,Content:content,obj1,isPinned})
     .then(response => {
       // console.log("New respose is",response);
       // console.log(response)
@@ -47,7 +47,7 @@ const Card = (props) => {
       }
       const deleteNote=async(id)=>{
         try {
-          await axios.post(`${import.meta.env.VITE_API_SERVER_BASE_URL}/delete-note`,{id:id}).then((res)=>{
+          await axios.post(`${import.meta.env.VITE_API_SERVER_BASE_URL}/api/v1/notes/delete-note`,{id:id}).then((res)=>{
           props.setNotes(props.notes.filter(note => note._id !== res.data.data.removedNote._id));
   
         }
