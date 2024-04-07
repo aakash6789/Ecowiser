@@ -96,10 +96,9 @@ const Home = () => {
     });
 }
 
-    useEffect(() => {
-      
+useEffect(() => {      
     getBooks();
-  }, []);
+}, []);
   useEffect(() => {
     getBooks();
   }, [currentPage]);
