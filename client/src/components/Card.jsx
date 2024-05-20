@@ -60,7 +60,7 @@ const Card = (props) => {
       }
   return (
     <div  id={obj1._id}  className='w-1/2 relative    border-gray-400 border-[2px] my-8  py-4 rounded-lg shadow-lg '>
-      <Popup trigger={isEdit} setTrigger={setIsEdit} >
+      <Popup pup trigger={isEdit} setTrigger={setIsEdit} >
         {/* <h1>Pop activated</h1> */}
         <div className='h-auto bg-white relative rounded-lg pt-4' >
       <button onClick={()=>setIsPinned(!isPinned)} className='absolute right-1 top-1'>  {isPinned? <TiPin/>: <TiPinOutline  />} </button> 
